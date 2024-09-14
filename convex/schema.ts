@@ -19,9 +19,10 @@ export const schema = defineSchema({
 
  companies: defineTable({
    company: s.string(), // company name
+   website: s.string(), // to careers page or main page?
    roles: s.array(s.string()), // might be just s.string()? also are typescript arrays fixes length or?
    industry: s.string(),
-   mission: s.string(),
+   about: s.string(), // blurb
    values: s.array(s.string()),
    skills: s.array(s.string()),
  }),

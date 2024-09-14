@@ -6,6 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium import webdriver
 
 import time
 from datetime import datetime
@@ -68,33 +69,21 @@ class simplify_scraper():
     
     # Define a function to scroll to the bottom of the page
     def scroll_to_bottom(self):
-        # Get the body element to perform actions on
-        # while True:
-        #     ActionChains(self.driver).send_keys(Keys.PAGE_DOWN).perform()
-        #     time.sleep(self.scroll_wait_time)
-            
-        #     try:
-        #         sentinel = WebDriverWait(self.driver, 10).until(
-        #             EC.presence_of_element_located((By.CLASS_NAME, 'ais-InfiniteHits-sentinel'))
-        #         )
-        #         if sentinel.is_displayed():
-        #             print("Found the sentinel element.")
-        #             break
-        #     except:
-        #         pass
-        # flag = self.driver.find_element(By.XPATH, "/html/body/div/div/div/div/div[2]/div/div[1]/a[1592]")
-        # self.driver.execute_script("arguments[0].scrollIntoView();", flag)
-        
         element = self.driver.find_element(By.TAG_NAME, 'a')
         i = 1
+        time.sleep(5)
         
+        # click to activate webpage
+        elem = self.driver.find_element(By.TAG_NAME, "h1")
+        elem.click()
+                
         for i in range(4):
             print(i)
             # element.send_keys(Keys.PAGE_DOWN)
             # self.driver.execute_script("window.scrollBy(0, window.innerHeight);")
-            tag = self.driver.find_element(By.TAG_NAME, 'html')
-            tag.send_keys(Keys.END)
-            time.sleep(3)
+            tag = self.driver.find_element(By.TAG_NAME, 'body')
+            tag.send_keys(Keys.PAGE_DOWN)
+            time.sleep(1)
 
         # get number of elements
         try:

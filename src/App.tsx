@@ -1,6 +1,8 @@
 import './App.css'
 import Companies from './Companies'
 import Events from './Events'
+import Home from './pages/Home';
+import './pages/Home.css'
 
 function App() {
 

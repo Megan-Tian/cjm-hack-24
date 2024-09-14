@@ -1,0 +1,7 @@
+.home-container {
+    @apply flex flex-col items-center justify-center min-h-screen bg-black;
+  }
+  
+  .login-container {
+    @apply bg-black p-8 rounded-lg shadow-md;
+  }

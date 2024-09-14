@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -8,68 +6,104 @@ interface ResumeModalProps {
 }
 
 const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
-  const saveFileId = useMutation(api.files.saveFileId);
+  const [formData, setFormData] = useState({
+    school: '',
+    graduationYear: '',
+    major: '',
+    skills: '',
+    industries: '',
+  });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedFile) {
-      setUploading(true);
-      try {
-        const uploadUrl = await generateUploadUrl();
-        const result = await fetch(uploadUrl, {
-          method: "POST",
-          headers: { "Content-Type": selectedFile.type },
-          body: selectedFile,
-        });
-        const { storageId } = await result.json();
-        await saveFileId({ storageId });
-        console.log('File uploaded successfully');
-        onClose();
-      } catch (error) {
-        console.error('Error uploading file:', error);
-      } finally {
-        setUploading(false);
-      }
-    }
+    // Here you would typically handle the form data submission
+    console.log('Submitting form data:', formData);
+    // After submission logic, close the modal
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Upload Resume</h2>
+      <div className="bg-white p-6 rounded-lg w-96">
+        <h2 className="text-xl font-bold mb-4">Your Experience</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileChange}
-            className="mb-4"
-          />
+          <div className="mb-4">
+            <label htmlFor="school" className="block mb-1">What school do you attend?</label>
+            <input
+              type="text"
+              id="school"
+              name="school"
+              value={formData.school}
+              onChange={handleInputChange}
+              className="w-full px-2 py-1 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="graduationYear" className="block mb-1">What is your graduation year?</label>
+            <select
+              id="graduationYear"
+              name="graduationYear"
+              value={formData.graduationYear}
+              onChange={handleInputChange}
+              className="w-full px-2 py-1 border rounded"
+            >
+              <option value="">Select year</option>
+              {[2025, 2026, 2027, 2028].map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="major" className="block mb-1">What is your major?</label>
+            <input
+              type="text"
+              id="major"
+              name="major"
+              value={formData.major}
+              onChange={handleInputChange}
+              className="w-full px-2 py-1 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="skills" className="block mb-1">What are your skills?</label>
+            <textarea
+              id="skills"
+              name="skills"
+              value={formData.skills}
+              onChange={handleInputChange}
+              className="w-full px-2 py-1 border rounded h-24"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="industries" className="block mb-1">What industries are you interested in?</label>
+            <textarea
+              id="industries"
+              name="industries"
+              value={formData.industries}
+              onChange={handleInputChange}
+              className="w-full px-2 py-1 border rounded h-24"
+            />
+          </div>
           <div className="flex justify-end">
             <button
               type="button"
               onClick={onClose}
               className="mr-2 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-              disabled={uploading}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              disabled={!selectedFile || uploading}
             >
-              {uploading ? 'Uploading...' : 'Upload'}
+              Submit
             </button>
           </div>
         </form>

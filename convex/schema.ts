@@ -1,13 +1,28 @@
-import { defineSchema, defineTable } from "convex/server"; // TO fix, from template online
-import { v } from "convex/values"; // TO fix, from template online
+import { defineSchema, defineTable, s } from 'convex/schema';
 
-// Define a messages table with two indexes.
 export const schema = defineSchema({
-  messages: defineTable({
-    channel: v.id("channels"),
-    body: v.string(),
-    user: v.id("users"),
-  })
-    .index("by_channel", ["channel"])
-    .index("by_channel_user", ["channel", "user"]),
+ resumes: defineTable({
+   text: s.string(),
+   embedding: s.array(s.number()),
+   metadata: s.object({
+     name: s.string(),
+     email: s.string(),
+     skills: s.array(s.string()),
+     experience: s.optional(s.array(s.object({
+       company: s.string(),
+       role: s.string(),
+       years: s.number(),
+     }))),
+   }),
+   uploadedAt: s.date(),
+ }),
+
+ companies: defineTable({
+   company: s.string(), // company name
+   roles: s.array(s.string()), // might be just s.string()? also are typescript arrays fixes length or?
+   industry: s.string(),
+   mission: s.string(),
+   values: s.array(s.string()),
+   skills: s.array(s.string()),
+ }),
 });

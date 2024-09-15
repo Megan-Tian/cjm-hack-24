@@ -71,13 +71,13 @@ class simplify_scraper():
     def scroll_to_bottom(self):
         element = self.driver.find_element(By.TAG_NAME, 'a')
         i = 1
-        time.sleep(5)
+        time.sleep(3)
         
-        # click to activate webpage
+        # click to activate webpage - MUST DO VERY IMPORTANT OTHERWISE NO SCROLL
         elem = self.driver.find_element(By.TAG_NAME, "h1")
         elem.click()
                 
-        for i in range(4):
+        for i in range(100):
             print(i)
             # element.send_keys(Keys.PAGE_DOWN)
             # self.driver.execute_script("window.scrollBy(0, window.innerHeight);")
